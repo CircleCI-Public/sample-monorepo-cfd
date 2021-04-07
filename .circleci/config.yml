@@ -1,0 +1,63 @@
+version: 2.1
+setup: true
+orbs:
+  path-filtering: circleci/path-filtering@0.0.1
+
+parameters:
+  run-setup:
+    type: boolean
+    default: true
+  run-frontend:
+    type: boolean
+    default: false
+  run-backend:
+    type: boolean
+    default: false
+
+jobs:
+  frontend-test:
+    docker:
+      - image: alpine
+    steps:
+      - checkout
+      - run: "echo 'Hello from Frontend!'"
+      - run: cat frontend/README.md
+
+  backend-test:
+    machine: true
+    steps:
+      - checkout
+      - run: "echo 'Hello from Backend!'"
+      - run: cat backend/README.md
+
+  backend-test-post:
+    docker:
+      - image: alpine
+    steps:
+      - run: "echo 'Continuing module B'"
+
+workflows:
+  pre:
+    when: << pipeline.parameters.run-setup >>
+    jobs:
+      - path-filtering/filter:
+          # Compare files on main
+          base-revision: main
+          # Config for continuation; herein we reuse this config itself
+          config-path: .circleci/config.yml
+          # 3-column space-separated table for mapping; `path-to-test parameter-to-set value-for-parameter` for each row
+          mapping: |
+            .* run-setup false
+            frontend/.* run-frontend true
+            backend/.* run-backend true
+  frontend:
+    when: << pipeline.parameters.run-frontend >>
+    jobs:
+      - frontend
+  backend-test:
+    when: << pipeline.parameters.run-backend >>
+    jobs:
+      - backend-test
+      - backend-test-post:
+          requires:
+            - backend-test
