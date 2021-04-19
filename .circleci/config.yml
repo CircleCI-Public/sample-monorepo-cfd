@@ -2,6 +2,7 @@ version: 2.1
 setup: true
 orbs:
   path-filtering: circleci/path-filtering@0.0.1
+  node: circleci/node@4.1 # Used for the Front-end
 
 parameters:
   run-setup:
@@ -17,24 +18,25 @@ parameters:
 jobs:
   frontend-test:
     docker:
-      - image: alpine
+      - image: cimg/node:15.1
     steps:
       - checkout
-      - run: "echo 'Hello from Frontend!'"
-      - run: cat frontend/README.md
+      - node/install-packages
+      - run:
+          name: Run tests
+          command: npm test
+
 
   backend-test:
-    machine: true
+    docker:
+      - image: cimg/python:3.8
     steps:
       - checkout
-      - run: "echo 'Hello from Backend!'"
-      - run: cat backend/README.md
-
-  backend-test-post:
-    docker:
-      - image: alpine
-    steps:
-      - run: "echo 'Continuing module B'"
+      - python/install-packages:
+          pkg-manager: pip
+      - run:
+          name: Run tests
+          command: pytest
 
 workflows:
   pre:
@@ -50,14 +52,11 @@ workflows:
             .* run-setup false
             frontend/.* run-frontend true
             backend/.* run-backend true
-  frontend:
-    when: << pipeline.parameters.run-frontend >>
-    jobs:
-      - frontend
-  backend-test:
-    when: << pipeline.parameters.run-backend >>
-    jobs:
-      - backend-test
-      - backend-test-post:
-          requires:
+      - frontend:
+          when: << pipeline.parameters.run-frontend >>
+          jobs:
+            - frontend
+      - backend-test:
+          when: << pipeline.parameters.run-backend >>
+          jobs:
             - backend-test
