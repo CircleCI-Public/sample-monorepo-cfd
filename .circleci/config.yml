@@ -55,7 +55,7 @@ workflows:
   frontend:
     when: << pipeline.parameters.run-frontend >>
     jobs:
-      - frontend
+      - frontend-test
   backend-test:
     when: << pipeline.parameters.run-backend >>
     jobs:
