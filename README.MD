@@ -36,7 +36,7 @@ This application is composed of two services and a database to create "Continuou
 
 ### Continuous Food Delivery
 
-![Frontend Preview](./frontend/.github/img/preview.gif)
+![Frontend Preview](https://github.com/CircleCI-Public/sample-javascript-cfd/blob/master/.github/img/preview.gif?raw=true)
 
 
 ## Local Development
