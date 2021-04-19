@@ -52,11 +52,11 @@ workflows:
             .* run-setup false
             frontend/.* run-frontend true
             backend/.* run-backend true
-      - frontend:
-          when: << pipeline.parameters.run-frontend >>
-          jobs:
-            - frontend
-      - backend-test:
-          when: << pipeline.parameters.run-backend >>
-          jobs:
-            - backend-test
+  frontend:
+    when: << pipeline.parameters.run-frontend >>
+    jobs:
+      - frontend
+  backend-test:
+    when: << pipeline.parameters.run-backend >>
+    jobs:
+      - backend-test
