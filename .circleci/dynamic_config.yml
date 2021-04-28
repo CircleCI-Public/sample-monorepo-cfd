@@ -43,3 +43,6 @@ workflows:
     when: << pipeline.parameters.run-backend >>
     jobs:
       - backend-test
+  my-workflow:
+    jobs:
+      - frontend-test
