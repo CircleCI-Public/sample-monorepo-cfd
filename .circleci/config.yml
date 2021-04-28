@@ -1,65 +1,19 @@
 version: 2.1
 orbs:
   path-filtering: circleci/path-filtering@0.0.2
-  node: circleci/node@4.1     # Used for the Frontend tests
-  python: circleci/python@1.2 # Used for the Backend tests
 
 # This allows you to use CircleCI's dynamic configuration feature
 setup: true
 
-parameters:
-  run-setup:
-    type: boolean
-    default: true
-  run-frontend:
-    type: boolean
-    default: false
-  run-backend:
-    type: boolean
-    default: false
-
-jobs:
-  frontend-test:
-    docker:
-      - image: cimg/node:15.1
-    steps:
-      - checkout
-      - node/install-packages
-      - run:
-          name: Run tests
-          command: npm test
-
-
-  backend-test:
-    docker:
-      - image: cimg/python:3.8
-    steps:
-      - checkout
-      - python/install-packages:
-          pkg-manager: pip
-      - run:
-          name: Run tests
-          command: pytest
-
 workflows:
-  pre:
-    when: << pipeline.parameters.run-setup >>
+  run-filter:
     jobs:
       - path-filtering/filter:
           # Compare files on main
           base-revision: main
-          # Config for continuation; herein we reuse this config itself
-          config-path: .circleci/config.yml
           # 3-column space-separated table for mapping; `path-to-test parameter-to-set value-for-parameter` for each row
           mapping: |
             .* run-setup false
             frontend/.* run-frontend true
             backend/.* run-backend true
-  frontend:
-    when: << pipeline.parameters.run-frontend >>
-    jobs:
-      - frontend-test
-  backend-test:
-    when: << pipeline.parameters.run-backend >>
-    jobs:
-      - backend-test
+          config-path: ".circleci/dynamic_config.yml"
