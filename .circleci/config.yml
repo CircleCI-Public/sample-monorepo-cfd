@@ -4,6 +4,8 @@ orbs:
   node: circleci/node@4.1     # Used for the Frontend tests
   python: circleci/python@1.2 # Used for the Backend tests
 
+# This allows you to use CircleCI's dynamic configuration feature
+setup: true
 
 parameters:
   run-setup:
