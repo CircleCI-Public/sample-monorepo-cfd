@@ -1,7 +1,7 @@
 # Sample Mono Repo App - Node/Python Vue/Flask
 
 <!-- Update badges after building on CircleCI -->
-<!-- [![CircleCI Build Status](https://circleci.com/gh/CircleCI-Public/sample-python-cfd.svg?style=shield)](https://circleci.com/gh/CircleCI-Public/sample-python-cfd) [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/CircleCI-Public/sample-python-cfd/main/LICENSE) -->
+[![CircleCI](https://circleci.com/gh/CircleCI-Public/sample-monorepo-cfd.svg?style=svg)](https://circleci.com/gh/CircleCI-Public/sample-monorepo-cfd) [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/CircleCI-Public/sample-python-cfd/main/LICENSE)
 
 - [Description](#description)
 - [Getting Started](#getting-started)
